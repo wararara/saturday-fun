@@ -29,12 +29,10 @@ def getUserByLogin(login):
 
 def addUser(user):
     cursor = g.conn.cursor()
-    cursor.execute('INSERT INTO `users`(`sUserName`, `sUserLogin`, `sUserPassword`, `sUserPhone`, `sUserMail`, `sUserSurname`, `iUserStatus`) VALUES (%s, %s, %s, %s, %s, %s, %s)',(user['name'], user['login'], user['password'], user['phone'], user['mail'], user['surname'],0))
+    cursor.execute('INSERT INTO `users`(`sUserName`, `sUserLogin`, `sUserPassword`, `sUserPhone`, `sUserMail`, `sUserSurname`, `sUserStatus`) VALUES (%s, %s, %s, %s, %s, %s, %s)',(user['name'], user['login'], user['password'], user['phone'], user['mail'], user['surname'],0))
     g.conn.commit()
     data = cursor.lastrowid
     return {'lastid':data}
-    
-
 
 
 # ROUTE ROUTE ROUTE ROUTE ROUTE ROUTE ROUTE ROUTE ROUTE ROUTE ROUTE ROUTE ROUTE ROUTE ROUTE ROUTE ROUTE ROUTE ROUTE ROUTE ROUTE ROUTE ROUTE ROUTEROUTE ROUTE ROUTE ROUTE ROUTE ROUTE ROUTE ROUTE ROUTE ROUTE ROUTE ROUTE
@@ -54,6 +52,16 @@ def cart():
 def logout():
     session.clear()
     return redirect('/login')
+
+@app.route("/adminadd")
+def adminadd():
+    if session:
+        if session['status'] == 1:
+            return render_template('adminadd.html', session = session)
+        else:
+            return render_template('403.html')
+    else:
+        return render_template('403.html')
 
 @app.route("/ajax/registration", methods = ["POST"])
 def ajax_rega():
